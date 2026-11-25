@@ -1,19 +1,45 @@
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./components/ui/table"
+import { Row } from "./Row"
+
+export type Combatant = {
+  id: string
+  name: string
+  initiative: number
+  hp: number
+  maxHp: number
+  ac: number
+}
 
 export function App() {
+  const [combatants] = useState<Combatant[]>([
+    { id: "1234", name: "jack", initiative: 1, hp: 55, maxHp: 100, ac: 18 },
+    { id: "5678", name: "ligma", initiative: 20, hp: 69, maxHp: 420, ac: 12 },
+  ])
+
   return (
     <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
-      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[50px] text-center">Initiative</TableHead>
+            <TableHead className="w-[100px] text-center">Name</TableHead>
+            <TableHead className="w-[20px] text-center">HP</TableHead>
+            <TableHead className="w-[20px] text-center">AC</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {combatants.map((c) => (
+            <Row key={c.id} combatant={c}></Row>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   )
 }
