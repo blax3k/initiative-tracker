@@ -7,15 +7,7 @@ import {
   TableRow,
 } from "./components/ui/table"
 import { Row } from "./Row"
-
-export type Combatant = {
-  id: string
-  name: string
-  initiative: number
-  hp: number
-  maxHp: number
-  ac: number
-}
+import { setHp, type Combatant } from "./Combatant"
 
 export function App() {
   const [combatants, setCombatants] = useState<Combatant[]>([
@@ -24,19 +16,8 @@ export function App() {
   ])
 
   function updateHp(id: string, hp: number) {
-    setCombatants((currentCombatants) =>
-      currentCombatants.map((combatant) => {
-        if (combatant.id !== id) {
-          return combatant
-        }
-
-        const safeHp = Number.isFinite(hp) ? hp : 0
-
-        return {
-          ...combatant,
-          hp: Math.max(0, Math.min(safeHp, combatant.maxHp)),
-        }
-      })
+    setCombatants((current) =>
+      current.map((c) => (c.id === id ? setHp(c, hp) : c))
     )
   }
 

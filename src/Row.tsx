@@ -1,4 +1,4 @@
-import type { Combatant } from "./App"
+import type { Combatant } from "./Combatant"
 import { Input } from "./components/ui/input"
 import { TableCell, TableRow } from "./components/ui/table"
 
