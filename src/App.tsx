@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useReducer } from "react"
 import {
   Table,
   TableBody,
@@ -7,19 +7,37 @@ import {
   TableRow,
 } from "./components/ui/table"
 import { Row } from "./Row"
-import { setHp, type Combatant } from "./Combatant"
+import { type Combatant } from "./Combatant"
+import { CombatantActionType, combatantsReducer } from "./combatantsReducer"
 
 export function App() {
-  const [combatants, setCombatants] = useState<Combatant[]>([
+  const initialCombatants: Combatant[] = [
     { id: "1234", name: "jack", initiative: 1, hp: 55, maxHp: 100, ac: 18 },
     { id: "5678", name: "ligma", initiative: 20, hp: 69, maxHp: 420, ac: 12 },
-  ])
+  ]
 
-  function updateHp(id: string, hp: number) {
-    setCombatants((current) =>
-      current.map((c) => (c.id === id ? setHp(c, hp) : c))
-    )
-  }
+  const [combatants, dispatch] = useReducer(
+    combatantsReducer,
+    initialCombatants
+  )
+
+  const onHpChange = useCallback(
+    (id: string, hp: number) =>
+      dispatch({ type: CombatantActionType.setHP, id, hp }),
+    []
+  )
+
+  const onInitiativeChange = useCallback(
+    (id: string, initiative: number) =>
+      dispatch({ type: CombatantActionType.setInitiative, id, initiative }),
+    []
+  )
+
+  const onNameChange = useCallback(
+    (id: string, name: string) =>
+      dispatch({ type: CombatantActionType.setName, id, name }),
+    []
+  )
 
   return (
     <div className="flex min-h-svh p-6">
@@ -34,7 +52,13 @@ export function App() {
         </TableHeader>
         <TableBody>
           {combatants.map((c) => (
-            <Row key={c.id} combatant={c} onHpChange={updateHp}></Row>
+            <Row
+              key={c.id}
+              combatant={c}
+              onHpChange={onHpChange}
+              onInitiativeChange={onInitiativeChange}
+              onNameChange={onNameChange}
+            ></Row>
           ))}
         </TableBody>
       </Table>
